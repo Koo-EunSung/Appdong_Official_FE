@@ -7,5 +7,5 @@ assignees: ''
 
 ---
 
-## Issue
-### 기능
+# Issue
+## 기능
