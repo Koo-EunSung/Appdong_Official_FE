@@ -15,7 +15,7 @@ function Main() {
     }, []);
 
     const handleRegisterButton = () => {
-        navigate("/register");
+        navigate("/form");
     }
     return (
         <div className="App bg-sky-100 h-dvh">
@@ -26,7 +26,9 @@ function Main() {
             </div>
             <h1 className='text-2xl font-bold'>경북대 중앙동아리 유일 앱개발 동아리</h1>
             <h2 className='text-xl font-semibold'>앱동 공식 홈페이지에 오신 것을 환영합니다</h2>
-            <button className='bg-sky-500 text-white rounded-xl mt-3 px-5 py-3 transition ease-in-out delay-75 hover:bg-blue-600 duration-200' onClick={handleRegisterButton}>가입 신청</button>
+            <button
+                className='bg-sky-500 text-white rounded-xl mt-3 px-5 py-3 transition ease-in-out delay-75 hover:bg-blue-600 duration-200'
+                onClick={() => handleRegisterButton()}>가입 신청</button>
         </main>
         </div>
   );

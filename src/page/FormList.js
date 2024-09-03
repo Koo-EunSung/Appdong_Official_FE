@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header"
 import axios from "../api/customAxios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function FormList() {
+    const navigate = useNavigate();
     const [headerHeight, setHeaderHeight] = useState(0);
     const [form, setForm] = useState([
+        {
+            id: 1,
+            title:"2024년 2학기 가입신청",
+            description:"여담으로 이거 그냥 문자열이라 입력한대로 뜸"
+        },
+        {
+            id: 2,
+            title: "임시 설문2",
+            description:""
+        }
     ]);
 
     useEffect(() => {
@@ -20,11 +32,17 @@ function FormList() {
 */
     }, []);
 
+    const buttonClickHandler = (formId) => {
+        navigate('/register', {state: formId});
+    }
+
     const getForm = form.map((item) => (
-        <div className="flex flex-col justify-center w-3/4 md:w-3/5 rounded-md bg-white mb-5">
-            <h2 className="px-5 py-4 text-3xl text-white bg-blue-500 rounded-t-md">{item.title}</h2>
+        <div key={item.id} className="flex flex-col justify-center w-4/5 md:w-3/5 rounded-md bg-white mb-5">
+            <h2 className="px-5 py-4 text-3xl text-white bg-sky-500 rounded-t-md">{item.title}</h2>
             <p className="px-5 py-5 text-xl whitespace-pre-line">{item.description}</p>
-            <button className='bg-blue-500 text-white text-xl rounded-xl ml-auto mx-5 my-5 px-5 py-3 w-fit align- transition ease-in-out delay-75 hover:bg-sky-400 duration-100'>작성</button>
+            <button 
+                className='bg-sky-500 text-white text-xl rounded-xl ml-auto mx-5 my-5 px-5 py-3 w-fit align- transition ease-in-out delay-75 hover:bg-blue-600 duration-100'
+                onClick={()=>buttonClickHandler(item.id)}>작성</button>
         </div>
     ))
 

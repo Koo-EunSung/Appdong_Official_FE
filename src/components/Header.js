@@ -28,7 +28,7 @@ function Header() {
                             <Link to ="/" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Home</Link>
                         </li>
                         <li>
-                            <Link to ="/register" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Register</Link>
+                            <Link to ="/form" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Register</Link>
                         </li>
                     </ul>
                 </nav>
