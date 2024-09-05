@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 function Register() {
     const location = useLocation();
+    const navigate = useNavigate();
     const formId = location.state;
     const data = {
         id: 1,
@@ -71,10 +74,8 @@ function Register() {
         active: true
     };
 
-    const [userInfo, setUserInfo] = useState({
-        name: "",
-        studentId: ""
-    });
+    const [username, setUserame] = useState("");
+    const [studentId, setStudentId] = useState("");
 
     const [answers, setAnswers] = useState([
         {
@@ -85,22 +86,24 @@ function Register() {
 
     const [headerHeight, setHeaderHeight] = useState(0);
 
+    const {
+        register, 
+        formState: { errors }, 
+        handleSubmit
+    } = useForm({
+        criteriaMode: "all"
+    });
+    const onSubmit = (d) => {
+        alert(JSON.stringify(d));
+    }
+
     useEffect(() => {
         const header = document.querySelector('header');
         setHeaderHeight(header.offsetHeight);
+        if(formId === undefined || formId === null)
+            navigate('/');
         console.log(formId);
     }, []);
-
-    const getQuestionList = data.questions.map((question) => (
-        <div className="px-5 py-4 flex flex-col justify-center text-left rounded-md mb-5 bg-gray-50">
-            <p className="text-xl">{question.title}</p>
-            <p>{question.description}</p>
-            <input
-                className="mt-7 focus:outline-none border-b-2 border-blue-500 bg-transparent w-1/2"
-                type="text"
-                placeholder="내 답변"/>
-        </div>
-    ))
 
     const changeAnswer = (questionId, answer) => {
         console.log(`questionId: ${questionId} answer: ${answer}`);
@@ -126,25 +129,92 @@ function Register() {
                     <p className="text-white text-xl">{data.description}</p>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-10">
-                    <div className="flex flex-col justify-center w-4/5 md:w-3/5 rounded-md bg-white mb-5">
+                    <form
+                        className="flex flex-col justify-center w-4/5 md:w-3/5 rounded-md bg-white mb-5"
+                        onSubmit={handleSubmit(onSubmit)}>
                         <p className="px-5 py-4 text-3xl text-white bg-sky-500 rounded-t-md"></p>
-                        <form className="px-5 py-4 flex flex-col">
-                            <div className="px-5 py-4 flex flex-col md:flex-row justify-start rounded-md mb-5 bg-gray-50">
-                                <div className="mb-3 flex justify-between md:block md:w-1/2">
-                                    <label className="mr-3 text-xl">이름</label>
+                        <div className="px-5 py-4 flex flex-col">
+                            <div className="px-5 py-4 flex flex-col justify-start rounded-md mb-5 bg-gray-50">
+                                <div className="mb-7 flex flex-col">
+                                    <div className="flex flex-col md:flex-row justify-between w-1/2">
+                                    <label className="mr-3 text-xl mb-2 md:mb-0">이름</label>
                                     <input 
+                                        {...register("username", {required:true})}
+                                        aria-invalid={errors.username ? "true" : "false"}
                                         className="focus:outline-none border-b-2 border-blue-500 bg-transparent"
                                         type="string"
+                                        value={username}
+                                        onChange={(event) => {console.log(event.target.value); setUserame(event.target.value)}}
                                     />
+                                    </div>
+                                    {errors.username?.type === "required" && (
+                                    <p className="flex justify-end text-red-500 w-1/2">이름을 입력해주세요</p>
+                                )}
                                 </div>
-                                <div className="flex justify-between md:block md:w-1/2">
-                                    <label className="mr-3 text-xl">학번(10자리)</label>
+                                
+                                <div className="mb-7 flex flex-col">
+                                    <div className="flex flex-col md:flex-row justify-between w-1/2">
+                                    <label className="mr-3 text-xl mb-2 md:mb-0">학번(10자리)</label>
                                     <input
+                                        {...register("studentId", {
+                                            required: {
+                                                value: true,
+                                                message: "학번을 입력해주세요."
+                                            },
+                                            pattern: {
+                                                value: /^20\d{8}$/,
+                                                message: "학번의 형식은 20으로 시작하는 10자리 숫자입니다."
+                                            }
+                                        })}
                                         className="focus:outline-none border-b-2 border-blue-500 bg-transparent"
                                         type="string"
                                         placeholder="20XXXXXXXX"
                                     />
+                                    </div>
+                                    <ErrorMessage
+                                        errors={errors}
+                                        name="studentId"
+                                        render={({ messages }) => {
+                                            console.log("messages: ", messages);
+                                            return messages
+                                            ? Object.entries(messages).map(([type, message]) => (
+                                                <p className="flex justify-end text-red-500 w-1/2" key={type}>{message}</p>
+                                            ))
+                                            : null;
+                                        }}
+                                    />
                                 </div>
+                                <div className="flex flex-col">
+                                    <div className="flex flex-col md:flex-row justify-between w-1/2">
+                                    <label className="mr-3 text-xl mb-2 md:mb-0">전화번호</label>
+                                    <input
+                                        {...register("phoneNumber", {
+                                            required: {
+                                                value: true,
+                                                message: "전화번호를 입력해주세요"
+                                            },
+                                            pattern: {
+                                                value: /^\d{3}-\d{3,4}-\d{4}$/,
+                                                message: "형식(010-XXXX-XXXX)에 맞게 입력해주세요"
+                                            }
+                                        })}
+                                        className="focus:invalid:border-red-500 focus:outline-none border-b-2 border-blue-500 bg-transparent"
+                                        type="string"
+                                    />      
+                                    </div>
+                                    <ErrorMessage
+                                        errors={errors}
+                                        name="phoneNumber"
+                                        render={({ messages }) => {
+                                            console.log("messages: ", messages);
+                                            return messages
+                                            ? Object.entries(messages).map(([type, message]) => (
+                                                <p className="flex justify-end text-red-500 w-1/2" key={type}>{message}</p>
+                                            ))
+                                            : null;
+                                        }}
+                                    />               
+                                    </div>
                                 </div>
                                 {data.questions.map((question) => (
                                     <div className=" flex flex-col justify-center text-left rounded-md mb-5 bg-white">
@@ -177,6 +247,7 @@ function Register() {
                                             {question.choice.map((value) => (
                                                 <label className="my-2">
                                                     <input
+                                                        className="mr-2"
                                                         checked={
                                                             answers.some(answer => answer.questionId === question.id)
                                                              && answers.find(answer => answer.questionId === question.id).answer === value}
@@ -207,8 +278,14 @@ function Register() {
                                     </div>
                                 </div>
                                 ))}
-                        </form>
-                    </div>
+                                <button
+                                    type="submit"
+                                    className="bg-sky-500 text-white text-xl rounded-xl ml-auto mx-5 my-5 px-5 py-3 w-fit transition ease-in-out delay-75 hover:bg-blue-600 duration-100"
+                                    >
+                                    제출
+                                </button>
+                        </div>
+                    </form>
                 </div>
             </main>
         </div>
