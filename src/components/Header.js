@@ -28,7 +28,7 @@ function Header() {
                             <Link to ="/" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Home</Link>
                         </li>
                         <li>
-                            <Link to ="/form" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Register</Link>
+                            <Link to ="/form" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Form</Link>
                         </li>
                     </ul>
                 </nav>
@@ -48,7 +48,7 @@ function Header() {
                 <nav>
                     <ul className="flex flex-col space-y-4 p-4">
                         <li><Link to="/" className="hover:underline">Home</Link></li>
-                        <li><Link to="/register" className="hover:underline">Register</Link></li>
+                        <li><Link to="/form" className="hover:underline">Form</Link></li>
                     </ul>
                 </nav>
             </div>
