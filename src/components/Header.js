@@ -3,6 +3,7 @@ import { useState } from "react";
 import logo from "../logo_transparent.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,7 @@ function Header() {
     }
 
     return (
-        <header className="bg-sky-500 text-white shadow-md fixed top-0 left-0 w-full">
+        <header className="bg-sky-500 text-white shadow-md fixed top-0 left-0 w-full z-10">
             <div className="container p-4 flex justify-start">
                 <div className="flex items-center">
                     <button className="block md:hidden text-white mr-2" onClick={toggleMenu}>
@@ -24,22 +25,16 @@ function Header() {
                 <nav className="hidden md:flex items-end">
                     <ul className="flex space-x-4 font-[SBAggroB]">
                         <li>
-                            <a href="#home" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Home</a>
+                            <Link to ="/" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Home</Link>
                         </li>
                         <li>
-                            <a href="#about" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">About</a>
-                        </li>
-                        <li>
-                            <a href="#services" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Services</a>
-                        </li>
-                        <li>
-                            <a href="#contact" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Contact</a>
+                            <Link to ="/form" className="transition ease-in-out delay-75 hover:text-blue-500 duration-200">Form</Link>
                         </li>
                     </ul>
                 </nav>
             </div>
             {/* 슬라이드 메뉴 */}
-            <div className={`fixed top-0 left-0 w-64 bg-sky-600 h-full z-20 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out md:hidden`}>
+            <div className={`fixed top-0 left-0 w-3/4 bg-sky-600 h-full z-20 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out md:hidden`}>
                 {/* 닫기 아이콘 */}
                 <div className="flex justify-between items-center p-4">
                     <div>
@@ -52,10 +47,8 @@ function Header() {
                 </div>
                 <nav>
                     <ul className="flex flex-col space-y-4 p-4">
-                        <li><a href="#home" className="hover:underline">Home</a></li>
-                        <li><a href="#about" className="hover:underline">About</a></li>
-                        <li><a href="#services" className="hover:underline">Services</a></li>
-                        <li><a href="#contact" className="hover:underline">Contact</a></li>
+                        <li><Link to="/" className="hover:underline">Home</Link></li>
+                        <li><Link to="/form" className="hover:underline">Form</Link></li>
                     </ul>
                 </nav>
             </div>
