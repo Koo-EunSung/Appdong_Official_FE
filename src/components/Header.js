@@ -13,7 +13,7 @@ function Header() {
     }
 
     return (
-        <header className="bg-sky-500 text-white shadow-md fixed top-0 left-0 w-full">
+        <header className="bg-sky-500 text-white shadow-md fixed top-0 left-0 w-full z-10">
             <div className="container p-4 flex justify-start">
                 <div className="flex items-center">
                     <button className="block md:hidden text-white mr-2" onClick={toggleMenu}>

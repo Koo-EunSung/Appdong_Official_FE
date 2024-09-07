@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header"
 import axios from "../api/customAxios";
 import { Navigate, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function FormList() {
     const navigate = useNavigate();
@@ -36,9 +37,9 @@ function FormList() {
     ))
 
     return (
-        <div className="bg-sky-100 min-h-dvh h-full">
+        <div className="bg-sky-100 min-h-dvh h-full flex flex-col">
             <Header />
-            <main className="flex flex-col" style={{marginTop: `${headerHeight}px`}}>
+            <main className="flex flex-col flex-grow" style={{marginTop: `${headerHeight}px`}}>
                 <div className="flex flex-col justify-center items-center text-center py-10 bg-black bg-opacity-25">
                     <h1 className="text-white text-4xl font-bold">가입 신청</h1>
                     <p className="text-white text-xl mt-2 w-2/4">앱동의 일원으로서 함께 변화하고 성장할 여러분을 기다립니다</p>
@@ -56,6 +57,7 @@ function FormList() {
                     }
                 </div>
             </main>
+            <Footer />
         </div>
     );
 }

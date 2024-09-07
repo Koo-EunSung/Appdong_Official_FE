@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "../api/customAxios";
+import Footer from "../components/Footer";
 
 function Register() {
     const location = useLocation();
@@ -57,9 +58,9 @@ function Register() {
     }, []);
 
     return (
-        <div className="bg-sky-100 h-full">
+        <div className="bg-sky-100 min-h-dvh h-full flex flex-col">
             <Header />
-            <main className="flex flex-col" style={{marginTop: `${headerHeight}px`}}>
+            <main className="flex flex-col flex-grow" style={{marginTop: `${headerHeight}px`}}>
                 <div className="flex flex-col justify-center items-center text-center py-10 bg-black bg-opacity-25">
                     <h1 className="text-white text-4xl font-bold">{formDetail.title}</h1>
                     <p className="text-white text-xl">{formDetail.description}</p>
@@ -243,6 +244,7 @@ function Register() {
                     </form>
                 </div>
             </main>
+            <Footer />
         </div>
     );
 }

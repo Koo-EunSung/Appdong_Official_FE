@@ -4,6 +4,7 @@ import logo_transparent from '../logo_transparent.png';
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import Footer from '../components/Footer';
 
 function Main() {
     const navigate = useNavigate();
@@ -18,18 +19,20 @@ function Main() {
         navigate("/form");
     }
     return (
-        <div className="App bg-sky-100 h-dvh">
+        <div className="App flex flex-col bg-sky-100 min-h-dvh h-full">
         <Header />
-        <main className="flex flex-col justify-center items-center py-36" style={{marginTop: `${headerHeight}px`}}>
+        <main className="flex flex-col justify-center items-center mb-16 w-3/4 flex-grow mx-auto" style={{marginTop: `${headerHeight}px`}}>
             <div className="flex flex-col justify-center items-center">
-            <img className="w-10/12 md:w-full" src={logo_transparent}/>
+                <img className="w-10/12 md:w-full" src={logo_transparent}/>
             </div>
-            <h1 className='text-2xl font-bold'>경북대 중앙동아리 유일 앱개발 동아리</h1>
-            <h2 className='text-xl font-semibold'>앱동 공식 홈페이지에 오신 것을 환영합니다</h2>
+            <h1 className='text-4xl font-bold text-center mb-4'>비전공자도 앱을 만들 수 있도록</h1>
+            <h2 className='text-2xl text-center font-bold'>경북대 중앙동아리 유일 앱개발 동아리</h2>
+            <h3 className='text-xl text-center font-semibold'>앱동 공식 홈페이지에 오신 것을 환영합니다</h3>
             <button
-                className='bg-sky-500 text-white rounded-xl mt-3 px-5 py-3 transition ease-in-out delay-75 hover:bg-blue-600 duration-200'
+                className='bg-sky-500 text-white rounded-full mt-3 px-5 py-3 md:px-6 md:py-4 md:text-xl transition ease-in-out delay-75 hover:bg-blue-600 duration-200'
                 onClick={() => handleRegisterButton()}>가입 신청</button>
         </main>
+        <Footer />
         </div>
   );
 }
