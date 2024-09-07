@@ -6,30 +6,19 @@ import { Navigate, useNavigate } from "react-router-dom";
 function FormList() {
     const navigate = useNavigate();
     const [headerHeight, setHeaderHeight] = useState(0);
-    const [form, setForm] = useState([
-        {
-            id: 1,
-            title:"2024년 2학기 가입신청",
-            description:"여담으로 이거 그냥 문자열이라 입력한대로 뜸"
-        },
-        {
-            id: 2,
-            title: "임시 설문2",
-            description:""
-        }
-    ]);
+    const [form, setForm] = useState([]);
 
     useEffect(() => {
       const header = document.querySelector('header');
       setHeaderHeight(header.offsetHeight);
-/*
+
       axios.get('/form')
         .then((res) => {
             console.log(res.data);
             setForm(res.data);
         })
         .catch((err) => console.log(err.message));
-*/
+
     }, []);
 
     const buttonClickHandler = (formId) => {
@@ -47,7 +36,7 @@ function FormList() {
     ))
 
     return (
-        <div className="bg-sky-100 h-full">
+        <div className="bg-sky-100 min-h-dvh h-full">
             <Header />
             <main className="flex flex-col" style={{marginTop: `${headerHeight}px`}}>
                 <div className="flex flex-col justify-center items-center text-center py-10 bg-black bg-opacity-25">

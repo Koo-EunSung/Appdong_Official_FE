@@ -1,88 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import axios from "../api/customAxios";
 
 function Register() {
     const location = useLocation();
     const navigate = useNavigate();
     const formId = location.state;
-    const data = {
-        id: 1,
-        title: "테스트용 설문지",
-        description: "테스트용 설문지의 설명입니다.",
-        questions: [
-          {
-            id: 1,
-            title: "질문1",
-            description: "질문 1의 설명",
-            choice: null,
-            type: "SHORT_ANSWER"
-          },
-          {
-            id: 2,
-            title: "질문2",
-            description: "질문 2의 설명",
-            choice: null,
-            type: "LONG_ANSWER"
-          },
-          {
-            id: 3,
-            title: "질문3",
-            description: "질문 3의 설명",
-            choice: [
-              "질문3 선택지 1번",
-              "질문3 선택지 2번",
-              "질문3 선택지 3번"
-            ],
-            type: "SELECT"
-          },
-          {
-            id: 4,
-            title: "질문4",
-            description: "질문 4의 설명",
-            choice: [
-              "질문4 선택지 1번",
-              "질문4 선택지 2번",
-              "질문4 선택지 3번",
-              "인문대학",
-              "사회과학대학",
-              "자연과학대학",
-              "경상대학",
-              "공과대학",
-              "IT대학",
-              "농업생명과학대학",
-              "예술대학",
-              "사범대학",
-              "의과대학",
-              "치과대학",
-              "수의과대학",
-              "생활과학대학",
-              "간호대학",
-              "약학대학",
-              "첨단기술융합대학",
-              "생태환경대학",
-              "과학기술대학",
-              "행정학부",
-              "자율전공부"
-            ],
-            type: "DROP_DOWN"
-          }
-        ],
-        active: true
-    };
 
-    const [username, setUserame] = useState("");
-    const [studentId, setStudentId] = useState("");
-
-    const [answers, setAnswers] = useState([
-        {
-            questionId: "",
-            answer: ""
-        }
-    ]);
+    const [formDetail, setFormDetail] = useState([]);
 
     const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -93,40 +21,48 @@ function Register() {
     } = useForm({
         criteriaMode: "all"
     });
-    const onSubmit = (d) => {
-        alert(JSON.stringify(d));
+    const onSubmit = (data) => {
+        console.log(data);
+        const answer = formDetail.questions.map(question => ({
+            questionId: question.id,
+            answer: data[question.id]
+        }));
+
+        axios.post('/answer-sheet', {
+            formId: formId,
+            name: data.username,
+            studentId: data.studentId,
+            phoneNumber: data.phoneNumber,
+            answer: answer
+        }).then(() => {
+            alert("제출되었습니다.");
+        }).catch((err) => alert(err.message));
     }
 
     useEffect(() => {
         const header = document.querySelector('header');
         setHeaderHeight(header.offsetHeight);
+
         if(formId === undefined || formId === null)
             navigate('/');
         console.log(formId);
-    }, []);
 
-    const changeAnswer = (questionId, answer) => {
-        console.log(`questionId: ${questionId} answer: ${answer}`);
-        const found = answers.some((answer) => answer.questionId === questionId);
-        if(found) {
-            setAnswers(answers.map((item) => {
-                if(item.questionId === questionId) {
-                    return {...item, answer:answer};
-                }
-                return item;
-            }))
-        } else {
-            setAnswers([...answers, {questionId:questionId, answer:answer}]);
-        }
-    }
+        axios.get(`/form/${formId}`)
+            .then((res) => {
+                console.log(res.data);
+                setFormDetail(res.data);
+            })
+            .catch((err) => console.log(err.message));
+
+    }, []);
 
     return (
         <div className="bg-sky-100 h-full">
             <Header />
             <main className="flex flex-col" style={{marginTop: `${headerHeight}px`}}>
                 <div className="flex flex-col justify-center items-center text-center py-10 bg-black bg-opacity-25">
-                    <h1 className="text-white text-4xl font-bold">{data.title}</h1>
-                    <p className="text-white text-xl">{data.description}</p>
+                    <h1 className="text-white text-4xl font-bold">{formDetail.title}</h1>
+                    <p className="text-white text-xl">{formDetail.description}</p>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-10">
                     <form
@@ -143,8 +79,7 @@ function Register() {
                                         aria-invalid={errors.username ? "true" : "false"}
                                         className="focus:outline-none border-b-2 border-blue-500 bg-transparent"
                                         type="string"
-                                        value={username}
-                                        onChange={(event) => {console.log(event.target.value); setUserame(event.target.value)}}
+                                        
                                     />
                                     </div>
                                     {errors.username?.type === "required" && (
@@ -216,7 +151,7 @@ function Register() {
                                     />               
                                     </div>
                                 </div>
-                                {data.questions.map((question) => (
+                                {formDetail.questions?.map((question) => (
                                     <div className=" flex flex-col justify-center text-left rounded-md mb-5 bg-white">
                                         <div className="px-5 py-4 flex flex-col justify-center text-left rounded-md mb-5 bg-gray-50">
                                         <p className="text-xl">{question.title}</p>
@@ -224,20 +159,32 @@ function Register() {
                                         {
                                             question.type === "SHORT_ANSWER"
                                             ?
+                                            <div>
                                             <input
+                                                {...register(`${question.id}`, {required:true})}
                                                 className="mt-7 focus:outline-none border-b-2 border-blue-500 bg-transparent w-1/2"
                                                 type="text"
                                                 placeholder="단문형 답변"/>
+                                                {errors[question.id]?.type === "required" && (
+                                                    <p className="flex justify-end text-red-500 w-1/2">답변을 입력해주세요</p>
+                                                )}                                            
+                                            </div>
                                             :null
                                         }
                                         {
                                             question.type === "LONG_ANSWER"
                                             ?
+                                            <div>
                                             <textarea 
-                                                className="mt-7 px-3 py-3 focus:outline-none border-2 border-blue-500 rounded-md bg-transparent"
+                                                {...register(`${question.id}`, {required:true})}
+                                                className="mt-7 px-3 py-3 focus:outline-none border-2 border-blue-500 rounded-md bg-transparent w-full"
                                                 rows={5} 
                                                 cols={33}
                                                 placeholder="장문형 답변"></textarea>
+                                                {errors[question.id]?.type === "required" && (
+                                                    <p className="flex justify-end text-red-500 w-full">답변을 입력해주세요</p>
+                                                )}
+                                            </div>
                                             : null
                                         }
                                         {
@@ -247,32 +194,40 @@ function Register() {
                                             {question.choice.map((value) => (
                                                 <label className="my-2">
                                                     <input
+                                                        {...register(`${question.id}`, {required:true})}
                                                         className="mr-2"
-                                                        checked={
-                                                            answers.some(answer => answer.questionId === question.id)
-                                                             && answers.find(answer => answer.questionId === question.id).answer === value}
+                                                        
                                                         value={value}
                                                         type="radio"
-                                                        onChange={() => changeAnswer(question.id, value)}
                                                     />
                                                     {value}
                                                 </label>
                                             ))}
+                                            {errors[question.id]?.type === "required" && (
+                                                    <p className="flex justify-end text-red-500 w-fit">답변을 선택해주세요</p>
+                                                )}
                                             </div>
                                             : null
                                         }
                                         {
                                             question.type === "DROP_DOWN" && question.choice !== undefined
                                             ?
+                                            <div>
                                             <select
+                                                {...register(`${question.id}`, {required:false})}
                                                 className="mt-7 px-3 py-3 w-1/2 focus:outline-blue-500"
                                                 onChange={(event)=> console.log(`id: ${question.id} value: ${event.target.value}`)}
+                                                defaultValue=""
                                             >
-                                                <option disabled hidden selected>선택</option>
+                                                <option disabled hidden selected value="">선택</option>
                                                 {question.choice.map((value) => (
                                                     <option value={value}>{value}</option>
                                                 ))}
                                             </select>
+                                            {errors[question.id]?.type === "required" && (
+                                                    <p className="flex justify-end text-red-500 w-fit">답변을 선택해주세요</p>
+                                            )}
+                                            </div>
                                             : null
                                         }
                                     </div>
