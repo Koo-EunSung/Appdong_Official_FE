@@ -162,7 +162,7 @@ function Register() {
                                             ?
                                             <div>
                                             <input
-                                                {...register(`${question.id}`, {required:true})}
+                                                {...register(`${question.id}`, {required:question.required})}
                                                 className="mt-7 focus:outline-none border-b-2 border-blue-500 bg-transparent w-1/2"
                                                 type="text"
                                                 placeholder="단문형 답변"/>
@@ -180,7 +180,7 @@ function Register() {
                                             <textarea 
                                                 {...register(`${question.id}`, {
                                                     required: {
-                                                        value: true,
+                                                        value: question.required,
                                                         message: "답변을 입력해주세요"
                                                     },
                                                     maxLength: {
@@ -214,7 +214,7 @@ function Register() {
                                             {question.choice.map((value) => (
                                                 <label className="my-2">
                                                     <input
-                                                        {...register(`${question.id}`, {required:true})}
+                                                        {...register(`${question.id}`, {required:question.required})}
                                                         className="mr-2"
                                                         
                                                         value={value}
@@ -234,12 +234,12 @@ function Register() {
                                             ?
                                             <div>
                                             <select
-                                                {...register(`${question.id}`, {required:true})}
+                                                {...register(`${question.id}`, {required:question.required})}
                                                 className="mt-7 px-3 py-3 w-1/2 focus:outline-blue-500"
                                                 onChange={(event)=> console.log(`id: ${question.id} value: ${event.target.value}`)}
                                                 defaultValue=""
                                             >
-                                                <option disabled hidden selected value="">선택</option>
+                                                <option disabled hidden value="">선택</option>
                                                 {question.choice.map((value) => (
                                                     <option value={value}>{value}</option>
                                                 ))}
