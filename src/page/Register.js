@@ -63,7 +63,7 @@ function Register() {
             <main className="flex flex-col flex-grow" style={{marginTop: `${headerHeight}px`}}>
                 <div className="flex flex-col justify-center items-center text-center py-10 bg-black bg-opacity-25">
                     <h1 className="text-white text-4xl font-bold">{formDetail.title}</h1>
-                    <p className="text-white text-xl">{formDetail.description}</p>
+                    <p className="text-white text-xl w-3/4 mx-auto text-center whitespace-pre">{formDetail.description}</p>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-10">
                     <form
@@ -156,7 +156,7 @@ function Register() {
                                     <div className=" flex flex-col justify-center text-left rounded-md mb-5 bg-white">
                                         <div className="px-5 py-4 flex flex-col justify-center text-left rounded-md mb-5 bg-gray-50">
                                         <p className="text-xl">{question.title}</p>
-                                        <p>{question.description}</p>
+                                        <p className="whitespace-pre">{question.description}</p>
                                         {
                                             question.type === "SHORT_ANSWER"
                                             ?
@@ -176,15 +176,34 @@ function Register() {
                                             question.type === "LONG_ANSWER"
                                             ?
                                             <div>
+                                            <div>
                                             <textarea 
-                                                {...register(`${question.id}`, {required:true})}
+                                                {...register(`${question.id}`, {
+                                                    required: {
+                                                        value: true,
+                                                        message: "답변을 입력해주세요"
+                                                    },
+                                                    maxLength: {
+                                                        value: 1000,
+                                                        message: "최대 1000자만 작성 가능합니다."
+                                                    }
+                                                })}
                                                 className="mt-7 px-3 py-3 focus:outline-none border-2 border-blue-500 rounded-md bg-transparent w-full"
                                                 rows={5} 
                                                 cols={33}
                                                 placeholder="장문형 답변"></textarea>
-                                                {errors[question.id]?.type === "required" && (
-                                                    <p className="flex justify-end text-red-500 w-full">답변을 입력해주세요</p>
-                                                )}
+                                            </div>
+                                            <ErrorMessage
+                                                    errors={errors}
+                                                    name={String(question.id)}
+                                                    render={({ messages }) => {
+                                                    console.log("messages: ", messages);
+                                                    return messages
+                                                    ? Object.entries(messages).map(([type, message]) => (
+                                                        <p className="flex justify-end text-red-500 w-full" key={type}>{message}</p>
+                                                    ))
+                                                : null;
+                                                }}/>
                                             </div>
                                             : null
                                         }
@@ -215,7 +234,7 @@ function Register() {
                                             ?
                                             <div>
                                             <select
-                                                {...register(`${question.id}`, {required:false})}
+                                                {...register(`${question.id}`, {required:true})}
                                                 className="mt-7 px-3 py-3 w-1/2 focus:outline-blue-500"
                                                 onChange={(event)=> console.log(`id: ${question.id} value: ${event.target.value}`)}
                                                 defaultValue=""
