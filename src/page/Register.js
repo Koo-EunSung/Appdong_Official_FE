@@ -37,6 +37,7 @@ function Register() {
             answer: answer
         }).then(() => {
             alert("제출되었습니다.");
+            navigate(-1);
         }).catch((err) => alert(err.message));
     }
 
@@ -156,7 +157,7 @@ function Register() {
                                     <div className=" flex flex-col justify-center text-left rounded-md mb-5 bg-white">
                                         <div className="px-5 py-4 flex flex-col justify-center text-left rounded-md mb-5 bg-gray-50">
                                         <p className="text-xl">{question.title}</p>
-                                        <p className="whitespace-pre">{question.description}</p>
+                                        <p className="whitespace-pre-wrap">{question.description}</p>
                                         {
                                             question.type === "SHORT_ANSWER"
                                             ?
