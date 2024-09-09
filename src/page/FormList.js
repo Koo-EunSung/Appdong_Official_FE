@@ -13,7 +13,7 @@ function FormList() {
       const header = document.querySelector('header');
       setHeaderHeight(header.offsetHeight);
 
-      axios.get('/form')
+      axios.get('/form/active')
         .then((res) => {
             console.log(res.data);
             setForm(res.data);
