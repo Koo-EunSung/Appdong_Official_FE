@@ -13,7 +13,7 @@ function FormList() {
       const header = document.querySelector('header');
       setHeaderHeight(header.offsetHeight);
 
-      axios.get('/form')
+      axios.get('/form/active')
         .then((res) => {
             console.log(res.data);
             setForm(res.data);
@@ -48,7 +48,7 @@ function FormList() {
                     {
                         form.length === 0
                         ? 
-                        <div className="text-center text-black w-3/4 md:w-3/5 py-24 h-dvh">
+                        <div className="text-center text-black w-3/4 md:w-3/5 py-24">
                             <p className="text-2xl font-bold">현재 가입 신청 기간이 아닙니다</p>
                             <p className="text-xl">오류라고 생각되시면, 동아리 공식 인스타를 통해 문의해주세요</p>
                             <p className="text-lg">공식 인스타그램: @knu.appdong</p>
