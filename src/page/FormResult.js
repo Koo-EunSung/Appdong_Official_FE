@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/customAxios";
+import { useNavigate } from "react-router-dom";
 
 function FormResult() {
     const [form, setForm] = useState([]);
-    const [currentForm, setCurrentForm] = useState();
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get('/form')
+       axios.get('/form')
         .then((res) => {
             setForm(res.data);
         })
         .catch((err) => console.log(err.message));
     }, []);
 
-    useEffect(() => {
-        axios.get(`/answer-sheet`, {
+    const selectChangeHandler = (currentForm) => {
+        axios.get(`/admin/answer-sheet`, {
             params: {
                 formId: Number(currentForm)
-            }
+            },
+            withCredentials: true
         }).then((res)=>{
             setData(res.data);
         }).catch((err) => console.log(err.message));
-
-    }, currentForm);
+    }
 
     return (
         <div>
             <h1>설문지 답변 조회 페이지</h1>
             {form !== undefined && form.length !== 0 && 
             <select
-                onChange={(event) => setCurrentForm(event.target.value)}>
+                onChange={(event) => selectChangeHandler(event.target.value)}>
                 <option disabled hidden selected value="">조회할 폼을 선택하세요</option>
                 {form.map((form) => (
                     <option value={form.id}>{form.id} {form.title}</option>
